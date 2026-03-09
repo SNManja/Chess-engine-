@@ -1,0 +1,5 @@
+if(EXISTS "/home/snmanja/Documents/Chess-engine-/engine/build/native-debug/engine_tests-b12d07c_tests.cmake")
+  include("/home/snmanja/Documents/Chess-engine-/engine/build/native-debug/engine_tests-b12d07c_tests.cmake")
+else()
+  add_test(engine_tests_NOT_BUILT-b12d07c engine_tests_NOT_BUILT-b12d07c)
+endif()
