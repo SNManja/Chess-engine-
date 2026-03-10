@@ -1,5 +1,0 @@
-# ninja log v5
-0	426	1773102305525609882	CMakeFiles/engine_wasm.dir/src/wasm/bindings.cpp.o	7f166f0ab7faf2c
-0	452	1773102305550609772	CMakeFiles/engine_core.dir/src/core/engine.cpp.o	eb978d18c1775bb7
-452	639	1773102305664609272	libengine_core.a	d592b2e4c4f1c5ac
-640	2387	1773102307467601369	engine.js	4576a40598b1e4f4

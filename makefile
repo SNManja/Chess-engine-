@@ -9,8 +9,8 @@ EMSDK_ENV    := $(ENGINE_DIR)/emsdk/emsdk_env.sh
 # -------------------------------
 # Tools
 # -------------------------------
-CMAKE := /usr/bin/cmake
-CTEST := /usr/bin/ctest
+CMAKE := cmake
+CTEST := ctest
 
 # -------------------------------
 # Phony targets
