@@ -48,7 +48,11 @@ inline bool get_bit(Bitboard &board, int square){
 
 
 constexpr Bitboard FILE_A = 0x0101010101010101ULL;
+constexpr Bitboard FILE_B = 0x0202020202020202ULL;
 constexpr Bitboard FILE_H = 0x8080808080808080ULL;
+constexpr Bitboard FILE_G = 0x4040404040404040ULL;
+constexpr Bitboard FILE_AB = FILE_A | FILE_B;
+constexpr Bitboard FILE_GH = FILE_G | FILE_H;
 
 constexpr Bitboard RANK_1 = 0x00000000000000FFULL;
 constexpr Bitboard RANK_8 = 0xFF00000000000000ULL;
@@ -74,13 +78,18 @@ void init_board() {
     all_pieces   = white_pieces | black_pieces;
 }
 
-void white_pawn_attacks(Bitboard &board,int square){
-    
-}
-
-void black_pawn_attacks(Bitboard &board,int square){
-
-
+//Dada una posicion, devuelve los movimientos posibles de una pieza. Se excluyen las posiciones donde haya una pieza aliada del jugador que realiza el movimiento. Para evitar codigo repetido en ambos colores parametrizo el bitboard de las piezas propias.
+Bitboard knight_attacks(square square, Bitboard own_pieces){
+    Bitboard knight = 1ULL << square;
+    return (knight << 17 ~FILE_A) |
+            (knight << 15 ~FILE_H) |
+            (knight >> 17 ~FILE_H) |
+            (knight >> 15 ~FILE_A) |
+            (knight << 10 ~FILE_AB) |
+            (knight >> 6 ~FILE_AB) |
+            (knight << 6 ~FILE_GH) |
+            (knight >> 10 ~FILE_GH) |
+            & ~own_pieces;
 }
 
 
