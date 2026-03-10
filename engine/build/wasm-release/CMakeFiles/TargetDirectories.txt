@@ -1,4 +1,0 @@
-/home/snmanja/Documents/Chess-engine-/engine/build/wasm-release/CMakeFiles/engine_core.dir
-/home/snmanja/Documents/Chess-engine-/engine/build/wasm-release/CMakeFiles/engine_wasm.dir
-/home/snmanja/Documents/Chess-engine-/engine/build/wasm-release/CMakeFiles/edit_cache.dir
-/home/snmanja/Documents/Chess-engine-/engine/build/wasm-release/CMakeFiles/rebuild_cache.dir
