@@ -39,6 +39,22 @@ wasm:
 	@test -f "$(EMSDK_ENV)" || (echo "ERROR: $(EMSDK_ENV) not found" && exit 1)
 	cd $(ENGINE_DIR) && bash -c "source emsdk/emsdk_env.sh && $(CMAKE) --preset wasm-release && $(CMAKE) --build --preset wasm-release"
 
+
+# -------------------------------
+# Copia a front
+# -------------------------------
+
+FRONT_WASM := web/frontend/src/wasm
+ENGINE_WASM_BUILD := engine/build/wasm-release
+
+.PHONY: dist
+
+dist: wasm
+	mkdir -p $(FRONT_WASM)
+	cp $(ENGINE_WASM_BUILD)/engine.js $(FRONT_WASM)/
+	cp $(ENGINE_WASM_BUILD)/engine.wasm $(FRONT_WASM)/
+	@echo "WASM copied to frontend"
+
 # -------------------------------
 # Reconfigure from scratch
 # -------------------------------
@@ -62,3 +78,4 @@ clean-wasm:
 
 clean:
 	rm -rf $(ENGINE_DIR)/build
+

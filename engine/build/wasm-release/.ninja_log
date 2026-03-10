@@ -1,0 +1,5 @@
+# ninja log v5
+0	271	1773103604734327186	CMakeFiles/engine_core.dir/src/core/engine.cpp.o	eb978d18c1775bb7
+460	2065	1773103606492320633	engine.js	4576a40598b1e4f4
+271	460	1773103604852326746	libengine_core.a	d592b2e4c4f1c5ac
+1	233	1773103604697327324	CMakeFiles/engine_wasm.dir/src/wasm/bindings.cpp.o	7f166f0ab7faf2c
