@@ -1,42 +1,98 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+:root {
+  --bg-grad-start: #0f1724;
+  --bg-grad-end: #071022;
+  --panel-bg: rgba(255, 255, 255, 0.03);
+  --accent: #9ae6b4;
+  --header-height: 64px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+html,
+body {
+  height: 100%;
+  margin: 0; /* evita scrolles/espacios inesperados */
+  background: linear-gradient(180deg, var(--bg-grad-start), var(--bg-grad-end));
+  color: white;
+  font-family: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+#app {
+  box-sizing: border-box;
+  padding-top: var(--header-height); /* deja espacio para el header fijo */
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  /* centra verticalmente el contenido restante sin sobreponer el header */
+  justify-content: flex-start;
+}
+
+/* header fijo en la parte superior */
+#header {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  top: 0;
+  left: 0;
+  height: var(--header-height);
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  padding: 0 20px;
+  box-sizing: border-box;
+  gap: 16px;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+#header-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: var(--accent);
+  margin: 0;
+}
+
+#header-wasm-info {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+/* contenedor del tablero: tamaño responsivo y aspecto */
+.chessboard {
+  margin: 24px;
+  padding: 16px;
+  width: min(80vmin, 600px); /* responsivo según viewport */
+  max-width: 90vw;
+  aspect-ratio: 1 / 1; /* mantiene cuadrado */
+  background: var(--panel-bg);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* pequeños ajustes para pantallas pequeñas */
+@media (max-width: 480px) {
+  #header-title {
+    font-size: 1rem;
   }
-  to {
-    transform: rotate(360deg);
+  #header-wasm-info {
+    font-size: 0.75rem;
+    padding: 4px 8px;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .chessboard {
+    width: 92vw;
+    margin: 12px;
+    padding: 8px;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
