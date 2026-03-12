@@ -42,7 +42,7 @@ inline void pop_bit(Bitboard &board, int square){
     board &= ~(1ULL << square);
 }
 
-inline bool get_bit(Bitboard &board, int square){
+inline bool get_bit(Bitboard board, int square){
     return board & (1ULL << square);
 }
 
@@ -78,19 +78,28 @@ void init_board() {
     all_pieces   = white_pieces | black_pieces;
 }
 
-//Dada una posicion, devuelve los movimientos posibles de una pieza. Se excluyen las posiciones donde haya una pieza aliada del jugador que realiza el movimiento. Para evitar codigo repetido en ambos colores parametrizo el bitboard de las piezas propias.
+/*Dada una posicion, devuelve los movimientos posibles de una pieza. Se excluyen las posiciones 
+donde haya una pieza aliada del jugador que realiza el movimiento. Para evitar codigo repetido 
+en ambos colores parametrizo el bitboard de las piezas propias.*/
 Bitboard knight_attacks(square square, Bitboard own_pieces){
     Bitboard knight = 1ULL << square;
-    return (knight << 17 & ~FILE_A) |
-            (knight << 15 & ~FILE_H) |
-            (knight >> 17 & ~FILE_H) |
-            (knight >> 15 & ~FILE_A) |
-            (knight << 10 & ~FILE_AB) |
-            (knight >> 6 & ~FILE_AB) |
-            (knight << 6 & ~FILE_GH) |
-            (knight >> 10 & ~FILE_GH) |
-            & ~own_pieces;
+    Bitboard attacks =
+        (knight << 17 & ~FILE_A) |
+        (knight << 15 & ~FILE_H) |
+        (knight >> 17 & ~FILE_H) |
+        (knight >> 15 & ~FILE_A) |
+        (knight << 10 & ~FILE_AB) |
+        (knight >> 6  & ~FILE_AB) |
+        (knight << 6  & ~FILE_GH) |
+        (knight >> 10 & ~FILE_GH);
+
+    return attacks & ~own_pieces;
 }
+
+
+
+
+
 
 
 namespace engine {
