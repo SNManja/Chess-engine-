@@ -110,9 +110,9 @@ void init_board() {
 /*Dada una posicion, devuelve los movimientos posibles de una pieza. Se excluyen las posiciones 
 donde haya una pieza aliada del jugador que realiza el movimiento. Para evitar codigo repetido 
 en ambos colores parametrizo el bitboard de las piezas propias.*/
-Bitboard knight_attacks(square square, Bitboard own_pieces){
+Bitboard knight_moves(square square, Bitboard own_pieces){
     Bitboard knight = 1ULL << square;
-    Bitboard attacks =
+    Bitboard moves =
         ((knight << 17) & ~FILE_A) |
         ((knight << 15) & ~FILE_H) |
         ((knight >> 17) & ~FILE_H) |
@@ -122,12 +122,12 @@ Bitboard knight_attacks(square square, Bitboard own_pieces){
         ((knight << 6)  & ~FILE_GH) |
         ((knight >> 10) & ~FILE_GH);
 
-    return attacks & ~own_pieces;
+    return moves & ~own_pieces;
 }
 
-Bitboard king_attacks(square sq, Bitboard own_pieces) {
+Bitboard king_moves(square sq, Bitboard own_pieces) { //FALTA VER ENROQUE Y QUE UN REY NO PUEDE MOVERSE A POSICIONES QUE ESTEN SIENDO ATACADAS
     Bitboard king = 1ULL << sq;
-    Bitboard attacks =
+    Bitboard moves =
         (king << 8)           | 
         (king >> 8)           |
         ((king << 1) & ~FILE_A) |  
@@ -137,9 +137,57 @@ Bitboard king_attacks(square sq, Bitboard own_pieces) {
         ((king >> 7) & ~FILE_A) | 
         ((king >> 9) & ~FILE_H);  
 
-    return attacks & ~own_pieces;
+    return moves & ~own_pieces;
 }
-//FALTA VER ENROQUE Y QUE UN REY NO PUEDE MOVERSE A POSICIONES QUE ESTEN SIENDO ATACADAS
+
+
+Bitboard bishop_moves(square sq, Bitboard own_pieces, Bitboard all_pieces, Bitboard enemy_pieces){
+    Bitboard bishop = 1ULL << sq;
+    Bitboard moves = 0ULL;
+
+    Bitboard diag = bishop << 9; //diag derecha arriba
+    while(diag & ~FILE_A){ 
+        if(diag & all_pieces){
+            moves |= diag & enemy_pieces;
+            break;
+        }
+        moves |= diag;
+        diag <<= 9;
+    }
+
+    diag = bishop << 7; //diag izquierda arriba
+    while(diag & ~FILE_H){ 
+        if(diag & all_pieces){
+            moves |= diag & enemy_pieces;
+            break;
+        }
+        moves |= diag;
+        diag <<= 7;
+    }
+
+    diag = bishop >> 9; //diag izquierda abajo
+    while(diag & ~FILE_H){ 
+        if(diag & all_pieces){
+            moves |= diag & enemy_pieces;
+            break;
+        }
+        moves |= diag;
+        diag >>= 9;
+    }
+
+    diag = bishop >> 7; //diag derecha abajo
+    while(diag & ~FILE_A){ 
+        if(diag & all_pieces){
+            moves |= diag & enemy_pieces;
+            break;
+        }
+        moves |= diag;
+        diag >>= 7;
+    }
+
+    return moves;
+
+}
 
 Bitboard white_pawn_moves(Bitboard pawns, Bitboard all_pieces, 
                           Bitboard enemy_pieces, square ep_square) {
@@ -152,8 +200,8 @@ Bitboard white_pawn_moves(Bitboard pawns, Bitboard all_pieces,
 
     //avance doble
     //solo lo puedo hacer desde la segunda fila.
-     constexpr Bitboard RANK_2 = 0x000000000000FF00ULL;
-     Bitboard push2 = ((pawns & RANK_2) << 16) & empty & (empty << 8); //pawns & RANK_2 se queda solo con los peones de la fila 2
+    constexpr Bitboard RANK_2 = 0x000000000000FF00ULL;
+    Bitboard push2 = ((pawns & RANK_2) << 16) & empty & (empty << 8); //pawns & RANK_2 se queda solo con los peones de la fila 2
     moves |= push2;
     
     //diagonales
@@ -161,7 +209,7 @@ Bitboard white_pawn_moves(Bitboard pawns, Bitboard all_pieces,
     Bitboard captura_izquierda = (pawns << 7) &  ~FILE_H & enemy_pieces;
     moves |= captura_derecha | captura_izquierda;
 
-        // captura al paso
+    // captura al paso 
     if (ep_square != NO_SQUARE) {
         Bitboard ep = 1ULL << ep_square;
         moves |= ((pawns << 9) & ~FILE_A & ep);
@@ -182,8 +230,8 @@ Bitboard black_pawn_moves(Bitboard pawns, Bitboard all_pieces,
 
     //avance doble
     //solo lo puedo hacer desde la septima fila.
-     constexpr Bitboard RANK_7 = 0x00FF000000000000ULL;
-     Bitboard push2 = ((pawns & RANK_7) >> 16) & empty & (empty >> 8); //pawns & RANK_7 se queda solo con los peones de la fila 7
+    constexpr Bitboard RANK_7 = 0x00FF000000000000ULL;
+    Bitboard push2 = ((pawns & RANK_7) >> 16) & empty & (empty >> 8); //pawns & RANK_7 se queda solo con los peones de la fila 7
     moves |= push2;
     
     //diagonales
@@ -194,8 +242,8 @@ Bitboard black_pawn_moves(Bitboard pawns, Bitboard all_pieces,
         // captura al paso
     if (ep_square != NO_SQUARE) {
         Bitboard ep = 1ULL << ep_square;
-        moves |= ((pawns << 9) & ~FILE_A & ep);
-        moves |= ((pawns << 7) & ~FILE_H & ep);
+        moves |= ((pawns >> 9) & ~FILE_A & ep);
+        moves |= ((pawns >> 7) & ~FILE_H & ep);
     }
 
    return moves;
